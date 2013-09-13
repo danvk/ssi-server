@@ -41,14 +41,14 @@ class SSIRequestHandler(SimpleHTTPRequestHandler):
   def translate_path(self, path):
     fs_path = SimpleHTTPRequestHandler.translate_path(self, path)
     if self.path.endswith('/'):
-      for index in "index.html", "index.htm":
+      for index in "index.html", "index.htm", "index.shtml":
         index = os.path.join(fs_path, index)
         if os.path.exists(index):
           fs_path = index
           break
 
-    if fs_path.endswith('.html'):
-      content = ssi.InlineIncludes(fs_path)
+    if fs_path.endswith('.html') or fs_path.endswith(".shtml"):
+      content = ssi.InlineIncludes(fs_path, path)
       fs_path = self.create_temp_file(fs_path, content)
     return fs_path
 
@@ -58,6 +58,8 @@ class SSIRequestHandler(SimpleHTTPRequestHandler):
 
   def create_temp_file(self, original_path, content):
     _, ext = os.path.splitext(original_path)
+    if ext == ".shtml":
+        ext = ".html"
     fd, path = tempfile.mkstemp(suffix=ext)
     os.write(fd, content)
     os.close(fd)
