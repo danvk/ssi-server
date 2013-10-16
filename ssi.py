@@ -11,7 +11,8 @@ def InlineIncludes(path, web_path):
     file_to_read =  x.group(2)
     if  len(os.path.dirname(web_path)) >2:
        file_to_read = os.path.join(os.path.dirname(web_path),file_to_read)[1:]
-    return file(file_to_read).read()
+    if os.path.exists(file_to_read):
+        return file(file_to_read).read()
     
   content = file(path).read()
   content = re.sub(r'<!-- *#include *(virtual|file)=[\'"]([^\'"]+)[\'"] *-->',
