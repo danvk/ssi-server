@@ -14,8 +14,14 @@ Run ./ssi_server.py in this directory and visit localhost:8000 for an exmaple.
 
 import os
 import ssi
-from SimpleHTTPServer import SimpleHTTPRequestHandler
-import SimpleHTTPServer
+try:
+    # This works for Python 2
+    from SimpleHTTPServer import SimpleHTTPRequestHandler
+    import SimpleHTTPServer
+except ImportError:
+    # This works for Python 3
+    from http.server import SimpleHTTPRequestHandler
+    import http.server as SimpleHTTPServer
 import tempfile
 
 
@@ -61,7 +67,10 @@ class SSIRequestHandler(SimpleHTTPRequestHandler):
     if ext == ".shtml":
         ext = ".html"
     fd, path = tempfile.mkstemp(suffix=ext)
-    os.write(fd, content)
+    try:
+        os.write(fd, content)  # This works for Python 2
+    except TypeError:
+        os.write(fd, bytes(content, 'UTF-8'))  # This works for Python 3
     os.close(fd)
 
     self.temp_files.append(path)
