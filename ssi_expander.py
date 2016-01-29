@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 '''
 This script copies the files in one directory to another, expanding any SSI
 <!-- #include --> statements it encounters along the way.
