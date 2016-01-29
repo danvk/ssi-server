@@ -4,6 +4,13 @@ Shared code for ssi_server.py and ssi_expander.py.
 
 import re
 import os.path
+import warnings
+
+error_tmpl = """
+<p style="background-color: #660000; color: white; padding: 20px">
+  %s
+</p>
+"""
 
 def InlineIncludes(path, web_path):
   """Read a file, expanding <!-- #include --> statements."""
@@ -16,6 +23,10 @@ def InlineIncludes(path, web_path):
     if os.path.exists(file_to_read):
       # Recursively process ssi calls in the included file
       return InlineIncludes(file_to_read, recursive_web_path)
+    else:
+      error = "File not found: %s" % file_to_read
+      warnings.warn(error)
+      return error_tmpl % error
 
   content = open(path).read()
   content = re.sub(r'<!-- *#include *(virtual|file)=[\'"]([^\'"]+)[\'"] *-->',
