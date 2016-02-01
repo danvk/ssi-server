@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 '''
 Use this in the same way as Python's SimpleHTTPServer:
 
