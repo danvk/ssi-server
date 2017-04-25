@@ -33,4 +33,3 @@ def InlineIncludes(path, web_path):
       get_include_file_content,
       content)
   return content
-

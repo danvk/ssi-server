@@ -19,12 +19,12 @@ def process(source, dest):
     dest_dir = os.path.realpath(os.path.join(dest, os.path.relpath(dirpath, source)))
     os.mkdir(dest_dir)
     for filename in filenames:
-      src_path = os.path.abspath(os.path.join(source, dirpath, filename))
+      src_path = os.path.abspath(os.path.join(dirpath, filename))
       dest_path = os.path.join(dest_dir, filename)
       if not filename.endswith('.html'):
         os.symlink(src_path, dest_path)
       else:
-        file(dest_path, 'w').write(ssi.InlineIncludes(src_path))
+        file(dest_path, 'w').write(ssi.InlineIncludes(src_path, "/%s" % os.path.relpath(src_path)))
 
     # ignore hidden directories
     for dirname in dirnames[:]:
